@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import os
+
 import ConfigParser
+import os
+import sys
 
 SUPERVISOR_SETTINGS = 'customizeme.cfg'
 SUPERVISOR_CONFIG = 'parts/supervisor/supervisord.conf'
@@ -48,16 +50,23 @@ def configure_supervisor():
 
     # Iterate trough all config files
     for cfg in config_files:
+        is_main_supervisor = cfg == SUPERVISOR_CONFIG
+        ignore_programs = is_main_supervisor
+
         if not os.path.exists(cfg):
+            # If file not found continue with the next, unless the missing
+            # file is the main supervisor, then exit
             print "> Config file {} doesn't exists".format(cfg)
-            continue
+            if is_main_supervisor:
+                print "> ERROR Did yoy run the buildout?".format(cfg)
+                sys.exit(1)
+            else:
+                continue
 
         print '> Parsing {}'.format(cfg)
 
         config = ConfigParser.ConfigParser()
         config.read(cfg)
-
-        ignore_programs = cfg == SUPERVISOR_CONFIG
 
         # For each section found, add it to the new config file
         # Sections already presetn won't be added again,
@@ -88,7 +97,7 @@ def configure_supervisor():
     # Overwrite maste config file with merged configuration
     with open(SUPERVISOR_CONFIG, 'w') as out_cfg:
         output.write(out_cfg)
-        print '> Writen {}'.format(SUPERVISOR_CONFIG)
+        print '\n> Writen {}'.format(SUPERVISOR_CONFIG)
 
 if __name__ == '__main__':
     print
