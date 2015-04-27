@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/var/python/python2.7/bin/python
 # -*- coding: utf-8 -*-
 
 import ConfigParser
@@ -84,7 +84,8 @@ def configure_supervisor():
                 if is_program_section:
                     if 'command' in config.options(section):
                         if 'chaussette' in config.get(section, 'command'):
-                            section_name = section.replace('program', 'fcgi-program')
+                            if 'fcgi-program' not in section:  
+                                section_name = section.replace('program', 'fcgi-program')
                 output.add_section(section_name)
                 print '  + Adding section {}'.format(section_name)
 
