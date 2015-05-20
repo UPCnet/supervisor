@@ -1,4 +1,4 @@
-#!/var/python/python2.7/bin/python
+#!/var/pyramid/python2.7/bin/python
 # -*- coding: utf-8 -*-
 
 import ConfigParser
@@ -86,8 +86,11 @@ def configure_supervisor():
                         if 'chaussette' in config.get(section, 'command'):
                             if 'fcgi-program' not in section:  
                                 section_name = section.replace('program', 'fcgi-program')
-                output.add_section(section_name)
-                print '  + Adding section {}'.format(section_name)
+                if section_name not in output.sections():
+                    output.add_section(section_name)
+                    print '  + Adding section {}'.format(section_name)
+                else:
+                    print '  x WARNING: Not adding duplicated section {}'.format(section_name)
 
             # Add all the options of the section
             # Options already set, won't be overwrited
