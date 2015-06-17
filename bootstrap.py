@@ -81,7 +81,7 @@ def install_configfile(source, destination):
         print 'Generated config file {}'.format(os.path.realpath(destination))
         return True
 
-install_configfile('customizeme.cfg.template', 'customizeme.cfg')
+install_configfile('templates/customizeme.cfg.in', 'customizeme.cfg')
 
 ######################################################################
 # load/install setuptools
