@@ -3,4 +3,5 @@ eggs
 parts
 .installed.cfg
 var
+supervisor_config
 
